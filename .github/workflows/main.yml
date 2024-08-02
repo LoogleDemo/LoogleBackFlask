@@ -21,19 +21,27 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        
 
     - name: Zip the application
       run: |
         zip -r flaskapp.zip . 
+
+    - name: Configure AWS credentials
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        echo "[default]" > ~/.aws/credentials
+        echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
+        echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
 
     - name: Deploy to CodeDeploy
       env:
         APPLICATION_NAME: ${{ secrets.CODEDEPLOY_APPLICATION }}
         DEPLOYMENT_GROUP: ${{ secrets.CODEDEPLOY_DEPLOYMENT_GROUP }}
         REGION: ${{ secrets.AWS_REGION }}
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}  
-        GEM_API_KEY: ${{ secrets.GEM_API_KEY }}      
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        GEM_API_KEY: ${{ secrets.GEM_API_KEY }}
       run: |
         aws deploy create-deployment \
           --application-name $APPLICATION_NAME \
