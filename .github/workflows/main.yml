@@ -7,6 +7,8 @@ on:
 
 env:
   S3_BUCKET_NAME: loogle-github-actions-s3-bucket
+  APPLICATION_NAME: ${{ secrets.CODEDEPLOY_APPLICATION }}
+  DEPLOYMENT_GROUP: ${{ secrets.CODEDEPLOY_DEPLOYMENT_GROUP }}
   REGION: ${{ secrets.AWS_REGION }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   GEM_API_KEY: ${{ secrets.GEM_API_KEY }}
