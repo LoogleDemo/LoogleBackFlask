@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-
 env:
   S3_BUCKET_NAME: loogle-github-actions-s3-bucket
   APPLICATION_NAME: ${{ secrets.CODEDEPLOY_APPLICATION }}
