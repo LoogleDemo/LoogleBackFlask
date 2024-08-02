@@ -137,4 +137,9 @@ def imageSearch():
     except Exception as e:
         print(f"오류 발생: {str(e)}")
         return jsonify({"error": "An error occurred during processing."}), 500
+    
+    
+@app.route('/health')
+def health_check():
+    return 'flask 성공'
 
