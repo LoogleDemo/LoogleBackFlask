@@ -1,12 +1,10 @@
 import openai
 from openai.embeddings_utils import get_embedding, cosine_similarity
-from config import OPENAI_API_KEY, GEM_API_KEY
 import pandas as pd
 import numpy as np
 import os
 
 from flask import Flask, request, jsonify
-
 
 import google.generativeai as genai
 from IPython.display import Markdown
