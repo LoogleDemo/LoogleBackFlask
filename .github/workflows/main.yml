@@ -11,6 +11,7 @@ env:
   REGION: ${{ secrets.AWS_REGION }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   GEM_API_KEY: ${{ secrets.GEM_API_KEY }}
+  
 
 jobs:
   deploy:
