@@ -9,7 +9,9 @@ TIME_NOW=$(date +%c)
 
 # 애플리케이션 시작
 echo "$TIME_NOW > Flask 애플리케이션 시작" >> $DEPLOY_LOG
-nohup gunicorn -w 4 -b 0.0.0.0:5000 app:app > $APP_LOG 2> $ERROR_LOG &
+nohup gunicorn -w 4 app:app -b 0.0.0.0:5000 > $APP_LOG 2> $ERROR_LOG &
 
 CURRENT_PID=$(pgrep -f 'gunicorn')
 echo "$TIME_NOW > 실행된 프로세스 아이디 $CURRENT_PID 입니다." >> $DEPLOY_LOG
+
+
