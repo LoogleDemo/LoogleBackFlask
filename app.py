@@ -145,3 +145,6 @@ def imageSearch():
 def health_check():
     return 'flask 성공'
 
+@app.route('/check_env')
+def check_env():
+    return f"OPENAI_API_KEY: {os.getenv('OPENAI_API_KEY')}, GEM_API_KEY: {os.getenv('GEM_API_KEY')}"
