@@ -13,6 +13,7 @@ pkill -f 'gunicorn'
 nohup /home/ubuntu/.local/bin/gunicorn -w 4 app:app -b 0.0.0.0:5000 > $APP_LOG 2> $ERROR_LOG &
 disown
 
+
 CURRENT_PID=$(pgrep -f 'gunicorn')
 echo "$TIME_NOW > 실행된 프로세스 아이디 $CURRENT_PID 입니다." >> $DEPLOY_LOG
 
