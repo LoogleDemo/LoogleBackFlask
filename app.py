@@ -85,6 +85,9 @@ def search():
         keyword_name = data['name']
         print("1")
         print(openai.api_key)
+        print(gem_api_key)
+        print('key 출력 완료')
+        
         results = search_clothes(df, keyword_name, n=48)
         print("2")
         
