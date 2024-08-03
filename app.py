@@ -10,9 +10,6 @@ import google.generativeai as genai
 from IPython.display import Markdown
 import PIL.Image
 
-# openai.api_key = OPENAI_API_KEY
-# gem_api_key = GEM_API_KEY
-
 openai.api_key = os.getenv("OPENAI_API_KEY")
 gem_api_key = os.getenv("GEM_API_KEY")
 
@@ -82,10 +79,12 @@ app = Flask(__name__)
 @app.route('/search', methods=['POST'])
 def search():
     print("flask 시작 제발!")
+    
     try:
         data = request.get_json()
         keyword_name = data['name']
         print("1")
+        print(openai.api_key)
         results = search_clothes(df, keyword_name, n=48)
         print("2")
         
