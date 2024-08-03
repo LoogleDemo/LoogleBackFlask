@@ -14,12 +14,16 @@ permissions:
 
 hooks:
   AfterInstall:
-    - location: scripts/set_env_vars.sh # 환경 변수
+    - location: scripts/set_env_vars.sh
       timeout: 60 
-      runas: root # 환경 변수 설정은 root 권한으로 실행
+      runas: root 
     - location: scripts/stop.sh 
       timeout: 60 
       runas: ubuntu 
+    - location: /bin/chmod
+      timeout: 60
+      runas: root
+      arguments: "+x /home/ubuntu/flaskapp/scripts/set_env_vars.sh" # 권한 부여
   ApplicationStart:
     - location: scripts/start.sh
       timeout: 60
