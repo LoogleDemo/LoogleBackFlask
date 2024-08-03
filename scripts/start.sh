@@ -10,7 +10,7 @@ TIME_NOW=$(date +%c)
 # 애플리케이션 시작
 echo "$TIME_NOW > Flask 애플리케이션 시작" >> $DEPLOY_LOG
 pkill -f 'gunicorn'
-nohup gunicorn -w 4 app:app -b 0.0.0.0:5000 > $APP_LOG 2> $ERROR_LOG &
+nohup /home/ubuntu/.local/bin/gunicorn -w 4 app:app -b 0.0.0.0:5000 > $APP_LOG 2> $ERROR_LOG &
 disown
 
 CURRENT_PID=$(pgrep -f 'gunicorn')
