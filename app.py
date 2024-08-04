@@ -144,4 +144,3 @@ def imageSearch():
 @app.route('/health')
 def health_check():
     return 'flask 성공'
-
