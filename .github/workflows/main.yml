@@ -3,16 +3,17 @@ name: Build and Deploy Flask to AWS EC2
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+
 
 env:
-  S3_BUCKET_NAME: looglereal-github-actions-s3-bucket
-  APPLICATION_NAME: looglereal-flask
-  DEPLOYMENT_GROUP: looglerealflask-codedeploy-deployment-group
-  REGION: ${{ secrets.AWS_REGION }}
+  AWS_REGION: ap-northeast-2
+  S3_BUCKET_NAME: looglereal-github-actions-s3-bucket 
+  CODE_DEPLOY_APPLICATION_NAME: looglereal-flask
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: looglerealflask-codedeploy-deployment-group
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   GEM_API_KEY: ${{ secrets.GEM_API_KEY }}
+  
+
 
 jobs:
   deploy:
@@ -39,24 +40,31 @@ jobs:
           . venv/bin/activate
           zip -qq -r ./$GITHUB_SHA.zip .
         shell: bash
-
+  
+      # (4) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
-          aws-region: ap-northeast-2
-
-      - name: Upload to S3
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+  
+      # (5) 빌드 결과물을 S3 버킷에 업로드
+      - name: Upload to AWS S3
         run: |
-          aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$APPLICATION_NAME/$GITHUB_SHA.zip
-          
+          aws deploy push \
+            --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+            --ignore-hidden-files \
+            --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
+            --source .
+  
+      # (6) S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
       - name: Deploy to AWS EC2 from S3
         run: |
           aws deploy create-deployment \
-            --application-name $$APPLICATION_NAME \
+            --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
             --deployment-config-name CodeDeployDefault.AllAtOnce \
-            --deployment-group-name $DEPLOYMENT_GROUP  \
-            --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$APPLICATION_NAME/$GITHUB_SHA.zip
+            --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+            --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip
 
                 
