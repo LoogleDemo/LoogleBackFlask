@@ -13,7 +13,7 @@ import PIL.Image
 openai.api_key = os.getenv("OPENAI_API_KEY")
 gem_api_key = os.getenv("GEM_API_KEY")
 
-datafile_path = "rendi_embedding.csv"
+datafile_path = "loogle_embedding.csv"
 
 df = pd.read_csv(datafile_path)
 df["embedding"] = df.embedding.apply(eval).apply(np.array)
