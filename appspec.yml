@@ -2,28 +2,18 @@ version: 0.0
 os: linux
 
 files:
-  - source: / 
-    destination: /home/ubuntu/flaskapp 
-    overwrite: yes 
-
+  - source: /
+    destination: /home/ubuntu/flaskapp
+    overwrite: yes
 permissions:
-  - object: / 
-    pattern: "**"
-    owner: ubuntu 
-    group: ubuntu 
-
+  - object: /home/ubuntu/flaskapp/
+    owner: ubuntu
+    group: ubuntu
 hooks:
   AfterInstall:
-    - location: scripts/set_env_vars.sh
-      timeout: 60 
-      runas: root 
-    - location: scripts/stop.sh 
-      timeout: 60 
-      runas: ubuntu 
-    - location: /bin/chmod
+    - location: scripts/deploy.sh
       timeout: 60
-      runas: root
-      arguments: "+x /home/ubuntu/flaskapp/scripts/set_env_vars.sh" # 권한 부여
+      runas: ubuntu
   ApplicationStart:
     - location: scripts/start.sh
       timeout: 60
